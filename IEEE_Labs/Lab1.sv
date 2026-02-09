@@ -24,6 +24,9 @@ module lab;
     l=1;
     r = 1;
     #10
+    count++;
+    t = $time;
+    
     $display("the value of count is: %d",count);
     $display("the value of time is: %d",t);
     $finish;
