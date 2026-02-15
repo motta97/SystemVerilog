@@ -1,0 +1,12 @@
+module Q2_tst (
+    input wire logic A,B,S,clk,RST,
+    output wire logic R
+
+);
+`protected
+    MTI!#<t{*s]YH}w<<Y#<=x>}BiUiOG!&w5VC};{R@s#Uk]<}k<e"[#QB7@Rssoio2$OJOK$z{rsm
+    rB32JsAZXs>KF+UD_37Y,SF\5xQFLj>eA6*v\Z]>1<%^VDX7~=1*i\kx^+u59G2HTOp+o^j^[x=1
+    o*UuxC=$Cp3Ao<TJ2d?<ZYp{_RSD}o;JDDsD>a{7aEB|L\@B]yQTv]l211n-eBKj1p{Bauq+BVXq
+    -]<H^\l?a1k]a_WnQUww
+`endprotected
+endmodule
