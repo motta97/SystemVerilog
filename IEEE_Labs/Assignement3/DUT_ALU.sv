@@ -6,7 +6,7 @@ module alu #(
     input  wire [3:0]       op,
     output reg  [WIDTH-1:0] result,
     output reg              carry,
-    output wire             zero
+    output wire             zero 
 );
 
     
@@ -19,13 +19,13 @@ module alu #(
     localparam SRL  = 4'd6;
     localparam MUL  = 4'd7;
 
-    reg [WIDTH-1:0] temp;
+    reg [WIDTH:0] temp;//changed
 
     // =====================================
     // Combinational ALU
     // =====================================
     always @(*) begin
-        temp = { (WIDTH+1){1'b0} };
+        temp = { (WIDTH){1'b0} };//changed
 
         case (op)
             ADD:  temp = A + B;
@@ -33,16 +33,16 @@ module alu #(
             AND: temp = A & B;
             OR:  temp = A | B;
             XOR: temp = A ^ B;
-            SLL:  temp = A >> 1;
-            SRL:  temp = A << 1;
+            SLL:  temp = A << 1;//changed
+            SRL:  temp = A >> 1;//changed
             MUL:  temp = A * B;
             default: temp = { (WIDTH+1){1'b0} };
         endcase
 
         result = temp[WIDTH-1:0];
-        carry  = temp[WIDTH-1];
+        carry  = temp[WIDTH];//changed
     end
-
-    assign zero = (result == {WIDTH{1'b0}});
+assign  zero = (result == {WIDTH{1'b0}});
+    
 
 endmodule
