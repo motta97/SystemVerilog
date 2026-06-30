@@ -6,7 +6,7 @@ interface decade_ifc(input bit clk);
 clocking cb @(posedge clk);
     default input #3ns output #2ns;
     input q;
-    output load,enable , master_reset, p;
+    output load,enable , master_reset, p
 endclocking 
 
 modport des (
