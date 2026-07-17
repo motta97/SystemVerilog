@@ -221,13 +221,14 @@ package alu_tb_pkg;
     endclass
     class scoreboard extends uvm_subscriber #(result_transaction);
         `uvm_component_utils(scoreboard);
-        int predicted;
+        result_transaction predicted_result_transaction;
         string s;
         command_transaction cmd;
         uvm_tlm_analysis_fifo #(command_transaction) cmd_f;
         function void build_phase(uvm_phase phase);
             cmd_f = new("cmd_f", this);
             cmd=new();
+            predicted_result_transaction=new();
         endfunction
 
         function new (string name, uvm_component parent);
@@ -238,12 +239,13 @@ package alu_tb_pkg;
             if(!cmd_f.try_get(cmd))
                 `uvm_fatal("Scorebaord","failed to get the cmd from the scoreboard");
             case(cmd.op)
-            add: predicted=cmd.A+cmd.B;
-            sub: predicted=cmd.A-cmd.B;
-            mul: predicted=cmd.A*cmd.B;
+            add: predicted_result_transaction.result=cmd.A+cmd.B;
+            sub: predicted_result_transaction.result=cmd.A-cmd.B;
+            mul: predicted_result_transaction.result=cmd.A*cmd.B;
             endcase
-            if(predicted!=t.result)begin
-                s= $sformatf("Error at op = %s A= %d B= %d Expected= %d, Found %d",op_en'(cmd.op), cmd.A, cmd.B, predicted, t.result);
+
+            if(!predicted_result_transaction.compare(t))begin
+                s= $sformatf("Error at op = %s A= %d B= %d Expected= %d, Found %d",op_en'(cmd.op), cmd.A, cmd.B, predicted_result_transaction.result, t.result);
                 `uvm_error("Scoreboard ",s);
             end
         endfunction
