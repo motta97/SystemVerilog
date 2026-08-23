@@ -1,0 +1,19 @@
+- converting the command transaction class into sequnce_item
+    - extended the uvm_sequence_item
+    - changed the class name to sequnce_item
+    - added result feild within the sequnce_item
+- modified the driver class
+    - extends the uvm_driver #(sequnce_item)
+    - modified the run_phase() method to get the sequnce_item and load it to the driver
+- created a new type sequencer of type uvm_sequencer and instantiated sequencer_h to be used in the testbench.
+- modified the base_tester class
+    - instanitiate the env and the sequencer and connect them to each other
+- modified the random_test class
+    - extend the base class
+    - instantiate random_sequence
+    - call random_sequence.start(sequencer_h)
+- modified the random_tester class
+    - change its name to be random_sequence
+    - extend the uvm_sequence #(sequence_item)
+    - create a body task
+    - use the start_item() and finish_item() methods

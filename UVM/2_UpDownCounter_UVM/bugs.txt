@@ -1,0 +1,24 @@
+Here I list the bugs I've faced and their corrospending solutions, so I can avoid them in other designs
+
+The bug:
+inside the scoreboard, we're subscribing to two analysis ports, we had one using the uvm_subscriber and another using the uvm_tlm_analysis_fifo. doing this got us to have the write function that gets called when the analysis port associated with the uvm_subscriber writes into that port, till here 's no problem, but in order to get the data from the fifo, we had to use the try_get() method since the "write" is a function and we call try_get() in it, so we can't call get() since it's blocking. Doing this got us to non-functional scoreboard since the data associated with the fifo was not ready when calling try_get()
+
+The solution:
+use two uvm_tlm_analysis_fifo, don't depend on uvm_subscriber, and call the blocking get() mthod on both of them inside the run_phase() task which allows blocking calls. The result is scoreboard being fully functional.
+
+
+The bug:
+I was driving the dut at the beginning of the stimulus with reset input just to make sure it behaves correctly. When I was monitoring the output, I couldn't see those reset transactions on the console output, I thought those transactions are not reaching the driver in the first place, it appered to me that the scoreboard was only making output to the console when we have an error, and those transactions have none.
+
+The solution:
+provide uvm_info for the transactions that passes as well instead of just the ones with errors, so you can trace the output better.
+
+
+The bug:
+I was driving and reading at the positive edge of the clk, the thing is dut also drives at the posedge, what I got at the end is shifted results, like the result the scoreboard is expecting is shifted one cycle later, for sure this resulted in scoreboard giving errors in almost all transactions
+
+The solution:
+Drive at the beginning of simulation, no waiting for any event before driving, and then after driving I wait for the negedge of the clk so the dut produces the correct result, and then monitor both the result and the command. For sure this may be avoided at all using clocking in the interface, but I didn't want to introduce SV code inside the counter verilog code.
+
+
+Simple design but good as a practice, looking forward for more inshallah :)
