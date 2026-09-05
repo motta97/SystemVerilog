@@ -3,7 +3,7 @@ class result_monitor extends uvm_monitor;
     virtual counter_ifc counter_ifc_h;
     uvm_analysis_port #(result_item) result_port;
     result_item result_tx;
-
+    result_item res;
     function new(string name, uvm_component parent);
         super.new(name, parent);
     endfunction
@@ -15,15 +15,20 @@ class result_monitor extends uvm_monitor;
 
         result_tx = result_item ::type_id::create("result_tx", this);
         result_port = new("result_port", this);
-        counter_ifc_h.result_monitor_h = this;
+        // counter_ifc_h.result_monitor_h = this;
     endfunction
 
-    function void write_to_monitor(int count);
+    task run_phase(uvm_phase phase);
 
-        result_tx.result= count;
-        result_port.write(result_tx);
+        forever begin 
+            @(posedge counter_ifc_h.clk);
+            #1;
+            res = result_item::type_id::create("res");
+            res.result=counter_ifc_h.count;
+            result_port.write(res);
+        end
+    endtask
 
-    endfunction
 
 
 

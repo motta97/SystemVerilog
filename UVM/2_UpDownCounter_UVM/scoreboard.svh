@@ -1,3 +1,4 @@
+
 class scoreboard extends uvm_component;
     `uvm_component_utils(scoreboard)
 
@@ -21,9 +22,12 @@ class scoreboard extends uvm_component;
 
         command_sequence_item cmd;
         result_item actual_result;
+        string s;
         forever begin
             cmd_fifo.get(cmd);
             result_fifo.get(actual_result);
+            s = $sformatf("Got the result at time: %f", $time );
+            `uvm_info("SCOREBOARD", s, UVM_LOW)
         
         if(!cmd.rst_n)
             predicted_result.result=0;
@@ -37,12 +41,12 @@ class scoreboard extends uvm_component;
             string error = $sformatf("rst_n = %0d, en = %0d, up_down = %0d, prev_value = %0d, current_value = %0d, expected_value = %0d",
                                     cmd.rst_n, cmd.en, cmd.up_down, prev_count, actual_result.result, predicted_result.result);
 
-            `uvm_error("scoreboard",error )
+            `uvm_error("SCOREBOARD FAIL",error )
         end
         else begin
             string pass = $sformatf("rst_n = %0d, en = %0d, up_down = %0d, prev_value = %0d, current_value = %0d, expected_value = %0d",
                                     cmd.rst_n, cmd.en, cmd.up_down, prev_count, actual_result.result, predicted_result.result);
-            `uvm_info("scoreboard", pass, UVM_LOW)
+            `uvm_info("SCOREBOAR PASS", pass, UVM_LOW)
         end
         prev_count = predicted_result.result;
         end

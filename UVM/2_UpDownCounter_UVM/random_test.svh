@@ -8,7 +8,7 @@ class random_test extends uvm_test;
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
-        //base_test::type_id::set_type_override(random_test::get_type());
+
     endfunction
 
 

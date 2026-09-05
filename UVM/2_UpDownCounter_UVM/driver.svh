@@ -19,7 +19,7 @@ task run_phase(uvm_phase phase);
 command_sequence_item cmd;
 forever begin
     seq_item_port.get_next_item(cmd);
-    `uvm_info("driver","I got here between get_next and item_done", UVM_HIGH)
+
     counter_ifc_h.load_ifc(cmd.rst_n, cmd.en, cmd.up_down);
 
     seq_item_port.item_done();

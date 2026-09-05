@@ -19,7 +19,7 @@ always @(posedge clk) begin
     end
     else
         count<=count;
-    $display("VALUES ARE: rst_n = %0d, up_down = %0d, en = %0d, count = %0d at time: %0f",rst_n, en, up_down, count, $time);
+    $strobe("VALUES ARE: rst_n = %0d, up_down = %0d, en = %0d, count = %0d at time: %0f",rst_n, en, up_down, count, $time);
 end
 
 

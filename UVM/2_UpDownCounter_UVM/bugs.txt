@@ -21,4 +21,25 @@ The solution:
 Drive at the beginning of simulation, no waiting for any event before driving, and then after driving I wait for the negedge of the clk so the dut produces the correct result, and then monitor both the result and the command. For sure this may be avoided at all using clocking in the interface, but I didn't want to introduce SV code inside the counter verilog code.
 
 
+The bug:
+Letting the monitors to be called by the interface is impractical since for passive agents where the driver is not active nothing would call the load_ifc and hence monitors would do nothing plus the monitor is taking what the driver has send for the command not the actual data hence if the driver had a bug, the monitors would never catch it plus it defeats the entire reason UVM separates driver from the monitor the monitor's job is to be a truthful, independent witness of the pins.
+
+The solution:
+five each monitor its own run_phase that watches the interface directly, synchronized to the clock, not called by anything else
+
+The bug:
+I had compilation errors just because I introduced always block inside the task run_phase, SV doesn't allow putting always construct inside classes in the first place, since classes are dynamic run_time objects while always blocks are static module-level constructs
+
+Ths solution:
+use forever instead
+
+The bug:
+
+the monitors was sampling the signals at the positive edge of the clock, which in turn sampled the result of the previous cycle since the dut didn't produce the result yet, which in turn made the scoreboard crazy saying that output is wrong.
+
+The solution:
+
+introduce #1 after the posedge of the clk in the monitors, so it only samples after 1 time step of the positive edge of the clock guranteeing that result(count in this case) is ready.
+
+
 Simple design but good as a practice, looking forward for more inshallah :)
